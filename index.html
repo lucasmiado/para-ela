@@ -98,6 +98,7 @@
         </div>
 
     <script>
+        // Ajustado as extensões para bater exatamente com as letras maiúsculas/minúsculas do seu GitHub
         const fotos = {
             inicio: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500", 
             sorriso: "sorriso.jpeg",
@@ -161,10 +162,10 @@
             },
             video_fase: {
                 titulo: "Fim do Script",
-                texto: "Até a nossa próxima linha de código! 😉",
+                texto: "Athe a nossa próxima linha de código! 😉",
                 imagem: fotos.videoFinal,
                 isVideo: true,
-                botoes: [] // Sem botões externos, o fluxo encerra de forma limpa no vídeo
+                botoes: [] 
             }
         };
 
@@ -181,8 +182,8 @@
             let htmlMidia = '';
             if (dados.imagem) {
                 if (dados.isVideo) {
-                    // Configurado para tocar automático no celular (com controls para se ela quiser pausar)
-                    htmlMidia = `<div class="img-container"><video src="${dados.imagem}" autoplay loop playsinline controls></video></div>`;
+                    // Muted e Playsinline são OBRIGATÓRIOS para rodar em navegadores mobile automaticamente
+                    htmlMidia = `<div class="img-container"><video src="${dados.imagem}" autoplay loop muted playsinline controls></video></div>`;
                 } else {
                     htmlMidia = `<div class="img-container"><img src="${dados.imagem}" alt="Foto"></div>`;
                 }
