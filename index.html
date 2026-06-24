@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uma surpresa para você...</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #1e293b;
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #38bdf8;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #cbd5e1;
+        }
+
+        .img-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #334155;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button {
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button.secondary {
+            background-color: #334155;
+            color: #94a3b8;
+        }
+        
+        .heart {
+            color: #f43f5e;
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="game-card">
+        <!-- As telas vão mudar aqui dinamicamente através do JavaScript -->
+    </div>
+
+    <script>
+        // Aqui você pode mudar os caminhos das imagens se quiser usar fotos locais ou links da internet
+        const fotos = {
+            inicio: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500", // Imagem tech/fofa inicial
+            pergunta1: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500", // Troque pela foto de vocês ou algo engraçado
+            final: "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=500" // Uma foto bem bonita dela ou de um lugar que queiram ir
+        };
+
+        const fases = {
+            inicio: {
+                titulo: "Compilando arquivos...",
+                texto: "Oi! Eu sei que o mundo da tecnologia é cheio de códigos complicados, mas decidi criar um algoritmo simples para te dizer uma coisa importante. Pronta para rodar esse script?",
+                imagem: fotos.inicio,
+                botoes: [
+                    { texto: "Executar script (Sim)", proxima: "pergunta" }
+                ]
+            },
+            pergunta: {
+                titulo: "Análise de Sistema",
+                texto: "Seu sorriso foi detectado no meu banco de dados recente e causou um efeito inesperado. Qual o diagnóstico atual do seu lado?",
+                imagem: fotos.pergunta1,
+                botoes: [
+                    { texto: "Também adoro conversar com você", proxima: "declaracao" },
+                    { texto: "Acho que esse sistema tá com bug (Rir)", proxima: "bug" }
+                ]
+            },
+            bug: {
+                titulo: "Erro 404: Sentimento Encontrado",
+                texto: "Não é bug, é uma funcionalidade nova! Só queria um pretexto interativo para te lembrar que adoro o seu jeito e o tempo que passamos conversando.",
+                imagem: fotos.inicio,
+                botoes: [
+                    { texto: "Continuar lendo...", proxima: "declaracao" }
+                ]
+            },
+            declaracao: {
+                titulo: "Resultado da Execução",
+                texto: "Sem linhas de código complexas ou joguinhos... Eu só queria te dizer, de um jeito diferente, que você tem um espaço muito especial por aqui. Adoro te conhecer cada dia mais e mal posso esperar pela nossa próxima conversa (ou quem sabe, nosso próximo encontro?).",
+                imagem: fotos.final,
+                botoes: [
+                    { texto: "Terminar com um sorriso", proxima: "fim" }
+                ]
+            },
+            fim: {
+                titulo: "Processo Concluído com Sucesso",
+                texto: "<div class='heart'>❤️</div>Obrigado por rodar o meu programa até o final. Agora me manda um print dessa tela ou me responde lá no chat se o seu app de mensagens não tiver travado com essa surpresa!",
+                imagem: "",
+                botoes: []
+            }
+        };
+
+        function carregarFase(nomeFase) {
+            const container = document.getElementById('game-card');
+            const dados = fases[nomeFase];
+            
+            let htmlBotoes = '';
+            dados.botoes.forEach((btn, index) => {
+                const classe = index > 0 ? 'secondary' : '';
+                htmlBotoes += `<button class="${classe}" onclick="carregarFase('${btn.proxima}')">${btn.texto}</button>`;
+            });
+
+            let htmlImagem = dados.imagem ? `<div class="img-container"><img src="${dados.imagem}" alt="Foto"></div>` : '';
+
+            container.innerHTML = `
+                <h1>${dados.titulo}</h1>
+                ${htmlImagem}
+                <p>${dados.texto}</p>
+                <div class="btn-container">
+                    ${htmlBotoes}
+                </div>
+            `;
+        }
+
+        // Inicia o jogo
+        carregarFase('inicio');
+    </script>
+</body>
+</html>
