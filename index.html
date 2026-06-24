@@ -58,7 +58,7 @@
             align-items: center;
         }
 
-        .img-container img {
+        .img-container img, .img-container video {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -70,7 +70,7 @@
             gap: 12px;
         }
 
-        button, a.btn-link {
+        button {
             background-color: #38bdf8;
             color: #0f172a;
             border: none;
@@ -79,12 +79,10 @@
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
             transition: transform 0.2s, background-color 0.2s;
         }
 
-        button:active, a.btn-link:active {
+        button:active {
             transform: scale(0.98);
         }
 
@@ -92,35 +90,22 @@
             background-color: #334155;
             color: #94a3b8;
         }
-        
-        .heart {
-            color: #f43f5e;
-            font-size: 3rem;
-            margin-bottom: 15px;
-            animation: pulse 1.2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
     </style>
 </head>
 <body>
 
     <div class="card" id="game-card">
-        <!-- Conteúdo dinâmico -->
-    </div>
+        </div>
 
     <script>
         const fotos = {
-            inicio: "gatinho.png", 
+            inicio: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500", 
             sorriso: "sorriso.jpeg",
             doguinhos: "WhatsApp Image 2026-06-24 at 02.42.17.jpeg",
-            gatinhoErro: "gatinho.png",
+            dogErro: "WhatsApp Image 2026-06-24 at 03.34.31.jpeg", 
             declaracao: "camisa preta.jpeg",
-            finalGato: "gato_final.jpeg"
+            finalGato: "gato_final.jpeg",
+            videoFinal: "ramm.mp4" 
         };
 
         const fases = {
@@ -144,7 +129,7 @@
             bug: {
                 titulo: "Erro 404: Sentimento Encontrado",
                 texto: "Não é bug, é uma funcionalidade nova! Só queria um pretexto interativo para te lembrar que adoro o seu jeito e o tempo que passamos conversando.",
-                imagem: fotos.gatinhoErro,
+                imagem: fotos.dogErro,
                 botoes: [
                     { texto: "Continuar lendo...", proxima: "doguinhos" }
                 ]
@@ -169,9 +154,17 @@
                 titulo: "Processo Concluído com Sucesso",
                 texto: "Obrigado por rodar o meu programa até o final eu Lucas Santiago agradeço. Depois me fala oque achou no zap se não tiver travado com essa surpresa! Mais do que \"JUSTO\" RS",
                 imagem: fotos.finalGato,
+                isVideo: false,
                 botoes: [
-                    { texto: "Chamar no WhatsApp 💬", link: "https://wa.me/55DDDSEUNUMERO" }
+                    { texto: "Assistir Encerramento Especial 🎬", proxima: "video_fase" }
                 ]
+            },
+            video_fase: {
+                titulo: "Fim do Script",
+                texto: "Até a nossa próxima linha de código! 😉",
+                imagem: fotos.videoFinal,
+                isVideo: true,
+                botoes: [] // Sem botões externos, o fluxo encerra de forma limpa no vídeo
             }
         };
 
@@ -181,19 +174,23 @@
             
             let htmlBotoes = '';
             dados.botoes.forEach((btn, index) => {
-                if (btn.link) {
-                    htmlBotoes += `<a href="${btn.link}" target="_blank" class="btn-link">${btn.texto}</a>`;
-                } else {
-                    const classe = index > 0 ? 'secondary' : '';
-                    htmlBotoes += `<button class="${classe}" onclick="carregarFase('${btn.proxima}')">${btn.texto}</button>`;
-                }
+                const classe = index > 0 ? 'secondary' : '';
+                htmlBotoes += `<button class="${classe}" onclick="carregarFase('${btn.proxima}')">${btn.texto}</button>`;
             });
 
-            let htmlImagem = dados.imagem ? `<div class="img-container"><img src="${dados.imagem}" alt="Foto"></div>` : '';
+            let htmlMidia = '';
+            if (dados.imagem) {
+                if (dados.isVideo) {
+                    // Configurado para tocar automático no celular (com controls para se ela quiser pausar)
+                    htmlMidia = `<div class="img-container"><video src="${dados.imagem}" autoplay loop playsinline controls></video></div>`;
+                } else {
+                    htmlMidia = `<div class="img-container"><img src="${dados.imagem}" alt="Foto"></div>`;
+                }
+            }
 
             container.innerHTML = `
                 <h1>${dados.titulo}</h1>
-                ${htmlImagem}
+                ${htmlMidia}
                 <p>${dados.texto}</p>
                 <div class="btn-container">
                     ${htmlBotoes}
